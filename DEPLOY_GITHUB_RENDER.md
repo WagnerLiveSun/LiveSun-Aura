@@ -83,7 +83,7 @@ git push -u origin main
    - **Region**: Escolha a mais próxima (ex: Oregon)
    - **Branch**: `main`
    - **Runtime**: `Node`
-   - **Build Command**: `pnpm install && pnpm build`
+   - **Build Command**: `pnpm install --no-frozen-lockfile && pnpm build`
    - **Start Command**: `node dist/index.js`
 
 #### 3.2. Configurar Variáveis de Ambiente
