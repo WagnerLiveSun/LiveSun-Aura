@@ -62,7 +62,7 @@ export function ResetPassword() {
   if (success) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-4">
-        <Card className="w-full max-w-md shadow-lg">
+        <Card className="w-full max-w-md shadow-lg border-2">
           <CardHeader className="space-y-1">
             <div className="flex justify-center mb-4">
               <CheckCircle2 className="h-16 w-16 text-green-500" />
@@ -88,7 +88,7 @@ export function ResetPassword() {
   if (!token) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-4">
-        <Card className="w-full max-w-md shadow-lg">
+        <Card className="w-full max-w-md shadow-lg border-2">
           <CardHeader className="space-y-1">
             <CardTitle className="text-2xl font-bold text-center">Token inválido</CardTitle>
             <CardDescription className="text-center">
@@ -110,7 +110,7 @@ export function ResetPassword() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-4">
-      <Card className="w-full max-w-md shadow-lg">
+      <Card className="w-full max-w-md shadow-lg border-2">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold text-center">Redefinir senha</CardTitle>
           <CardDescription className="text-center">
@@ -126,7 +126,7 @@ export function ResetPassword() {
             )}
 
             <div className="space-y-2">
-              <Label htmlFor="password">Nova senha</Label>
+              <Label htmlFor="password" className="text-gray-900 dark:text-gray-100">Nova senha</Label>
               <Input
                 id="password"
                 type="password"
@@ -136,11 +136,12 @@ export function ResetPassword() {
                 required
                 disabled={isLoading}
                 minLength={8}
+                className="bg-white dark:bg-gray-800"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="confirmPassword">Confirmar senha</Label>
+              <Label htmlFor="confirmPassword" className="text-gray-900 dark:text-gray-100">Confirmar senha</Label>
               <Input
                 id="confirmPassword"
                 type="password"
@@ -150,6 +151,7 @@ export function ResetPassword() {
                 required
                 disabled={isLoading}
                 minLength={8}
+                className="bg-white dark:bg-gray-800"
               />
             </div>
 
@@ -170,10 +172,10 @@ export function ResetPassword() {
           </form>
         </CardContent>
         <CardFooter className="flex flex-col space-y-2">
-          <div className="text-sm text-center text-muted-foreground">
+          <div className="text-sm text-center text-gray-700 dark:text-gray-300">
             <a
               href="/"
-              className="hover:underline text-primary"
+              className="hover:underline text-blue-600 dark:text-blue-400"
             >
               Voltar para o login
             </a>

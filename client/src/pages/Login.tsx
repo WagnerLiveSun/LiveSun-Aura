@@ -43,7 +43,7 @@ export function Login() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-4">
-      <Card className="w-full max-w-md shadow-lg">
+      <Card className="w-full max-w-md shadow-lg border-2">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold text-center">LiveSun Sunset</CardTitle>
           <CardDescription className="text-center">
@@ -59,7 +59,7 @@ export function Login() {
             )}
 
             <div className="space-y-2">
-              <Label htmlFor="email">E-mail</Label>
+              <Label htmlFor="email" className="text-gray-900 dark:text-gray-100">E-mail</Label>
               <Input
                 id="email"
                 type="email"
@@ -68,11 +68,12 @@ export function Login() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 disabled={isLoading}
+                className="bg-white dark:bg-gray-800"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password">Senha</Label>
+              <Label htmlFor="password" className="text-gray-900 dark:text-gray-100">Senha</Label>
               <Input
                 id="password"
                 type="password"
@@ -81,6 +82,7 @@ export function Login() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 disabled={isLoading}
+                className="bg-white dark:bg-gray-800"
               />
             </div>
 
@@ -101,10 +103,10 @@ export function Login() {
           </form>
         </CardContent>
         <CardFooter className="flex flex-col space-y-2">
-          <div className="text-sm text-center text-muted-foreground">
+          <div className="text-sm text-center text-gray-700 dark:text-gray-300">
             <a
               href="/esqueci-senha"
-              className="hover:underline text-primary"
+              className="hover:underline text-blue-600 dark:text-blue-400"
             >
               Esqueci minha senha
             </a>
