@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, useSearchParams } from "wouter";
+import { useRouter, useSearchParams } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,7 +9,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2, CheckCircle2 } from "lucide-react";
 
 export function ResetPassword() {
-  const navigate = useNavigate();
+  const router = useRouter();
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token") || "";
 
@@ -74,7 +74,7 @@ export function ResetPassword() {
           </CardHeader>
           <CardContent>
             <Button
-              onClick={() => navigate("/")}
+              onClick={() => router.navigate("/")}
               className="w-full"
             >
               Fazer login
@@ -97,7 +97,7 @@ export function ResetPassword() {
           </CardHeader>
           <CardContent>
             <Button
-              onClick={() => navigate("/esqueci-senha")}
+              onClick={() => router.navigate("/esqueci-senha")}
               className="w-full"
             >
               Solicitar nova redefinição
