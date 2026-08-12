@@ -61,21 +61,63 @@ export function ResetPassword() {
 
   if (success) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-4">
-        <Card className="w-full max-w-md shadow-lg border-2">
-          <CardHeader className="space-y-1">
-            <div className="flex justify-center mb-4">
-              <CheckCircle2 className="h-16 w-16 text-green-500" />
+      <div style={{ 
+        minHeight: '100vh', 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'center',
+        backgroundColor: '#f5f5f5',
+        padding: '20px'
+      }}>
+        <Card style={{ 
+          width: '100%', 
+          maxWidth: '400px',
+          backgroundColor: '#ffffff',
+          border: '2px solid #000000',
+          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+        }}>
+          <CardHeader style={{ paddingBottom: '20px' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
+              <div style={{ 
+                padding: '16px', 
+                backgroundColor: '#22c55e', 
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}>
+                <CheckCircle2 style={{ height: '48px', width: '48px', color: '#ffffff' }} />
+              </div>
             </div>
-            <CardTitle className="text-2xl font-bold text-center">Senha redefinida</CardTitle>
-            <CardDescription className="text-center">
+            <CardTitle style={{ 
+              fontSize: '28px', 
+              fontWeight: 'bold', 
+              textAlign: 'center',
+              color: '#000000',
+              marginBottom: '10px'
+            }}>
+              Senha redefinida
+            </CardTitle>
+            <CardDescription style={{ 
+              textAlign: 'center',
+              color: '#333333',
+              fontSize: '14px'
+            }}>
               Sua senha foi redefinida com sucesso. Você já pode fazer login.
             </CardDescription>
           </CardHeader>
           <CardContent>
             <Button
               onClick={() => router.navigate("/")}
-              className="w-full"
+              style={{
+                width: '100%',
+                height: '50px',
+                backgroundColor: '#000000',
+                color: '#ffffff',
+                fontSize: '16px',
+                fontWeight: 'bold',
+                border: '2px solid #000000'
+              }}
             >
               Fazer login
             </Button>
@@ -87,18 +129,51 @@ export function ResetPassword() {
 
   if (!token) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-4">
-        <Card className="w-full max-w-md shadow-lg border-2">
-          <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl font-bold text-center">Token inválido</CardTitle>
-            <CardDescription className="text-center">
+      <div style={{ 
+        minHeight: '100vh', 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'center',
+        backgroundColor: '#f5f5f5',
+        padding: '20px'
+      }}>
+        <Card style={{ 
+          width: '100%', 
+          maxWidth: '400px',
+          backgroundColor: '#ffffff',
+          border: '2px solid #000000',
+          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+        }}>
+          <CardHeader style={{ paddingBottom: '20px' }}>
+            <CardTitle style={{ 
+              fontSize: '28px', 
+              fontWeight: 'bold', 
+              textAlign: 'center',
+              color: '#000000',
+              marginBottom: '10px'
+            }}>
+              Token inválido
+            </CardTitle>
+            <CardDescription style={{ 
+              textAlign: 'center',
+              color: '#333333',
+              fontSize: '14px'
+            }}>
               O link de redefinição de senha é inválido ou expirou.
             </CardDescription>
           </CardHeader>
           <CardContent>
             <Button
               onClick={() => router.navigate("/esqueci-senha")}
-              className="w-full"
+              style={{
+                width: '100%',
+                height: '50px',
+                backgroundColor: '#000000',
+                color: '#ffffff',
+                fontSize: '16px',
+                fontWeight: 'bold',
+                border: '2px solid #000000'
+              }}
             >
               Solicitar nova redefinição
             </Button>
@@ -109,24 +184,61 @@ export function ResetPassword() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-4">
-      <Card className="w-full max-w-md shadow-lg border-2">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center">Redefinir senha</CardTitle>
-          <CardDescription className="text-center">
+    <div style={{ 
+      minHeight: '100vh', 
+      display: 'flex', 
+      alignItems: 'center', 
+      justifyContent: 'center',
+      backgroundColor: '#f5f5f5',
+      padding: '20px'
+    }}>
+      <Card style={{ 
+        width: '100%', 
+        maxWidth: '400px',
+        backgroundColor: '#ffffff',
+        border: '2px solid #000000',
+        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+      }}>
+        <CardHeader style={{ paddingBottom: '20px' }}>
+          <CardTitle style={{ 
+            fontSize: '28px', 
+            fontWeight: 'bold', 
+            textAlign: 'center',
+            color: '#000000',
+            marginBottom: '10px'
+          }}>
+            Redefinir senha
+          </CardTitle>
+          <CardDescription style={{ 
+            textAlign: 'center',
+            color: '#333333',
+            fontSize: '14px'
+          }}>
             Digite sua nova senha
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
             {error && (
-              <Alert variant="destructive">
-                <AlertDescription>{error}</AlertDescription>
+              <Alert style={{ 
+                backgroundColor: '#fee2e2', 
+                border: '2px solid #ef4444',
+                color: '#000000'
+              }}>
+                <AlertDescription style={{ color: '#000000', fontWeight: 'bold' }}>
+                  {error}
+                </AlertDescription>
               </Alert>
             )}
 
-            <div className="space-y-2">
-              <Label htmlFor="password" className="text-gray-900 dark:text-gray-100">Nova senha</Label>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              <Label htmlFor="password" style={{ 
+                color: '#000000', 
+                fontWeight: 'bold',
+                fontSize: '14px'
+              }}>
+                Nova senha
+              </Label>
               <Input
                 id="password"
                 type="password"
@@ -136,12 +248,24 @@ export function ResetPassword() {
                 required
                 disabled={isLoading}
                 minLength={8}
-                className="bg-white dark:bg-gray-800"
+                style={{
+                  backgroundColor: '#ffffff',
+                  border: '2px solid #000000',
+                  color: '#000000',
+                  height: '45px',
+                  fontSize: '16px'
+                }}
               />
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="confirmPassword" className="text-gray-900 dark:text-gray-100">Confirmar senha</Label>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              <Label htmlFor="confirmPassword" style={{ 
+                color: '#000000', 
+                fontWeight: 'bold',
+                fontSize: '14px'
+              }}>
+                Confirmar senha
+              </Label>
               <Input
                 id="confirmPassword"
                 type="password"
@@ -151,18 +275,32 @@ export function ResetPassword() {
                 required
                 disabled={isLoading}
                 minLength={8}
-                className="bg-white dark:bg-gray-800"
+                style={{
+                  backgroundColor: '#ffffff',
+                  border: '2px solid #000000',
+                  color: '#000000',
+                  height: '45px',
+                  fontSize: '16px'
+                }}
               />
             </div>
 
             <Button
               type="submit"
-              className="w-full"
               disabled={isLoading}
+              style={{
+                width: '100%',
+                height: '50px',
+                backgroundColor: '#000000',
+                color: '#ffffff',
+                fontSize: '16px',
+                fontWeight: 'bold',
+                border: '2px solid #000000'
+              }}
             >
               {isLoading ? (
                 <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  <Loader2 style={{ marginRight: '8px', height: '20px', width: '20px' }} className="animate-spin" />
                   Redefinindo...
                 </>
               ) : (
@@ -171,11 +309,19 @@ export function ResetPassword() {
             </Button>
           </form>
         </CardContent>
-        <CardFooter className="flex flex-col space-y-2">
-          <div className="text-sm text-center text-gray-700 dark:text-gray-300">
+        <CardFooter style={{ paddingTop: '20px' }}>
+          <div style={{ 
+            width: '100%', 
+            textAlign: 'center',
+            fontSize: '14px'
+          }}>
             <a
               href="/"
-              className="hover:underline text-blue-600 dark:text-blue-400"
+              style={{ 
+                color: '#0000ff',
+                textDecoration: 'underline',
+                fontWeight: 'bold'
+              }}
             >
               Voltar para o login
             </a>

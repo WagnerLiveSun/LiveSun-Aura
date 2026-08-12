@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Loader2, CheckCircle2, Sparkles } from "lucide-react";
+import { Loader2, CheckCircle2 } from "lucide-react";
 
 export function ForgotPassword() {
   const router = useRouter();
@@ -42,25 +42,63 @@ export function ForgotPassword() {
 
   if (success) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 via-purple-50 to-pink-100 dark:from-gray-800 dark:via-gray-900 dark:to-gray-800 p-4">
-        <Card className="w-full max-w-md shadow-2xl border-4 border-purple-200 dark:border-purple-700">
-          <CardHeader className="space-y-4 pb-6">
-            <div className="flex justify-center">
-              <div className="p-4 bg-gradient-to-br from-green-500 to-emerald-500 rounded-full shadow-lg">
-                <CheckCircle2 className="h-12 w-12 text-white" />
+      <div style={{ 
+        minHeight: '100vh', 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'center',
+        backgroundColor: '#f5f5f5',
+        padding: '20px'
+      }}>
+        <Card style={{ 
+          width: '100%', 
+          maxWidth: '400px',
+          backgroundColor: '#ffffff',
+          border: '2px solid #000000',
+          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+        }}>
+          <CardHeader style={{ paddingBottom: '20px' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
+              <div style={{ 
+                padding: '16px', 
+                backgroundColor: '#22c55e', 
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}>
+                <CheckCircle2 style={{ height: '48px', width: '48px', color: '#ffffff' }} />
               </div>
             </div>
-            <CardTitle className="text-3xl font-bold text-center bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
+            <CardTitle style={{ 
+              fontSize: '28px', 
+              fontWeight: 'bold', 
+              textAlign: 'center',
+              color: '#000000',
+              marginBottom: '10px'
+            }}>
               E-mail enviado
             </CardTitle>
-            <CardDescription className="text-center text-gray-700 dark:text-gray-300 text-base">
+            <CardDescription style={{ 
+              textAlign: 'center',
+              color: '#333333',
+              fontSize: '14px'
+            }}>
               Enviamos instruções para redefinir sua senha para o e-mail informado.
             </CardDescription>
           </CardHeader>
           <CardContent>
             <Button
               onClick={() => router.navigate("/")}
-              className="w-full h-12 text-base font-semibold bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+              style={{
+                width: '100%',
+                height: '50px',
+                backgroundColor: '#000000',
+                color: '#ffffff',
+                fontSize: '16px',
+                fontWeight: 'bold',
+                border: '2px solid #000000'
+              }}
             >
               Voltar para o login
             </Button>
@@ -71,31 +109,61 @@ export function ForgotPassword() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 via-purple-50 to-pink-100 dark:from-gray-800 dark:via-gray-900 dark:to-gray-800 p-4">
-      <Card className="w-full max-w-md shadow-2xl border-4 border-purple-200 dark:border-purple-700">
-        <CardHeader className="space-y-4 pb-6">
-          <div className="flex justify-center">
-            <div className="p-4 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full shadow-lg">
-              <Sparkles className="h-12 w-12 text-white" />
-            </div>
-          </div>
-          <CardTitle className="text-3xl font-bold text-center bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-            Aura LiveSun
+    <div style={{ 
+      minHeight: '100vh', 
+      display: 'flex', 
+      alignItems: 'center', 
+      justifyContent: 'center',
+      backgroundColor: '#f5f5f5',
+      padding: '20px'
+    }}>
+      <Card style={{ 
+        width: '100%', 
+        maxWidth: '400px',
+        backgroundColor: '#ffffff',
+        border: '2px solid #000000',
+        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+      }}>
+        <CardHeader style={{ paddingBottom: '20px' }}>
+          <CardTitle style={{ 
+            fontSize: '28px', 
+            fontWeight: 'bold', 
+            textAlign: 'center',
+            color: '#000000',
+            marginBottom: '10px'
+          }}>
+            Esqueci minha senha
           </CardTitle>
-          <CardDescription className="text-center text-gray-700 dark:text-gray-300 text-base">
+          <CardDescription style={{ 
+            textAlign: 'center',
+            color: '#333333',
+            fontSize: '14px'
+          }}>
             Digite seu e-mail para receber instruções de redefinição
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-6">
-          <form onSubmit={handleSubmit} className="space-y-5">
+        <CardContent>
+          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
             {error && (
-              <Alert variant="destructive" className="border-2">
-                <AlertDescription className="font-medium">{error}</AlertDescription>
+              <Alert style={{ 
+                backgroundColor: '#fee2e2', 
+                border: '2px solid #ef4444',
+                color: '#000000'
+              }}>
+                <AlertDescription style={{ color: '#000000', fontWeight: 'bold' }}>
+                  {error}
+                </AlertDescription>
               </Alert>
             )}
 
-            <div className="space-y-2">
-              <Label htmlFor="email" className="text-gray-900 dark:text-gray-100 font-semibold text-base">E-mail</Label>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              <Label htmlFor="email" style={{ 
+                color: '#000000', 
+                fontWeight: 'bold',
+                fontSize: '14px'
+              }}>
+                E-mail
+              </Label>
               <Input
                 id="email"
                 type="email"
@@ -104,18 +172,32 @@ export function ForgotPassword() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 disabled={isLoading}
-                className="bg-white dark:bg-gray-800 border-2 h-12 text-base"
+                style={{
+                  backgroundColor: '#ffffff',
+                  border: '2px solid #000000',
+                  color: '#000000',
+                  height: '45px',
+                  fontSize: '16px'
+                }}
               />
             </div>
 
             <Button
               type="submit"
-              className="w-full h-12 text-base font-semibold bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
               disabled={isLoading}
+              style={{
+                width: '100%',
+                height: '50px',
+                backgroundColor: '#000000',
+                color: '#ffffff',
+                fontSize: '16px',
+                fontWeight: 'bold',
+                border: '2px solid #000000'
+              }}
             >
               {isLoading ? (
                 <>
-                  <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                  <Loader2 style={{ marginRight: '8px', height: '20px', width: '20px' }} className="animate-spin" />
                   Enviando...
                 </>
               ) : (
@@ -124,11 +206,19 @@ export function ForgotPassword() {
             </Button>
           </form>
         </CardContent>
-        <CardFooter className="flex flex-col space-y-2 pt-6">
-          <div className="text-sm text-center text-gray-700 dark:text-gray-300">
+        <CardFooter style={{ paddingTop: '20px' }}>
+          <div style={{ 
+            width: '100%', 
+            textAlign: 'center',
+            fontSize: '14px'
+          }}>
             <a
               href="/"
-              className="hover:underline text-purple-600 dark:text-purple-400 font-medium"
+              style={{ 
+                color: '#0000ff',
+                textDecoration: 'underline',
+                fontWeight: 'bold'
+              }}
             >
               Voltar para o login
             </a>
