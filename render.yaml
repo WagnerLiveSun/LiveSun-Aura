@@ -1,3 +1,5 @@
+# Render Blueprint para LiveSun Aura
+# Atualizado em 2026-08-12 para corrigir conexão de banco de dados
 services:
   - type: web
     name: livesun-aura
