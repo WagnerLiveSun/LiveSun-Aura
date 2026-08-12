@@ -8,9 +8,11 @@ services:
       - key: NODE_ENV
         value: production
       - key: DATABASE_URL
-        sync: false
+        value: mysql://u951548013_livesun_aura:quemsabe123!A@195.35.61.111:3306/u951548013_livesun_aura
+        sync: true
       - key: JWT_SECRET
-        sync: false
+        value: 5224f24e2b50a72e111f28ac279f5c01
+        sync: true
       - key: BREVO_API_KEY
         sync: false
       - key: BREVO_FROM_EMAIL
