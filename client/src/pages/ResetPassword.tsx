@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter, useSearchParams } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
@@ -18,12 +18,6 @@ export function ResetPassword() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [isDark, setIsDark] = useState(false);
-
-  useEffect(() => {
-    const darkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    setIsDark(darkMode);
-  }, []);
 
   const resetPasswordMutation = trpc.auth.redefinirSenha.useMutation({
     onSuccess: () => {
@@ -65,77 +59,23 @@ export function ResetPassword() {
     }
   };
 
-  const styles = {
-    container: {
-      minHeight: '100vh',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: isDark ? '#1a1a2e' : '#f5f5f5',
-      padding: '20px'
-    },
-    card: {
-      width: '100%',
-      maxWidth: '400px',
-      backgroundColor: isDark ? '#16213e' : '#ffffff',
-      border: `2px solid ${isDark ? '#ffffff' : '#000000'}`,
-      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
-    },
-    title: {
-      fontSize: '28px',
-      fontWeight: 'bold',
-      textAlign: 'center',
-      color: isDark ? '#ffffff' : '#000000',
-      marginBottom: '10px'
-    },
-    description: {
-      textAlign: 'center',
-      color: isDark ? '#e0e0e0' : '#333333',
-      fontSize: '14px'
-    },
-    label: {
-      color: isDark ? '#ffffff' : '#000000',
-      fontWeight: 'bold',
-      fontSize: '14px'
-    },
-    input: {
-      backgroundColor: isDark ? '#0f3460' : '#ffffff',
-      border: `2px solid ${isDark ? '#ffffff' : '#000000'}`,
-      color: isDark ? '#ffffff' : '#000000',
-      height: '45px',
-      fontSize: '16px'
-    },
-    button: {
-      width: '100%',
-      height: '50px',
-      backgroundColor: isDark ? '#e94560' : '#000000',
-      color: '#ffffff',
-      fontSize: '16px',
-      fontWeight: 'bold',
-      border: '2px solid',
-      borderColor: isDark ? '#e94560' : '#000000'
-    },
-    link: {
-      color: isDark ? '#e94560' : '#0000ff',
-      textDecoration: 'underline',
-      fontWeight: 'bold'
-    },
-    alert: {
-      backgroundColor: isDark ? '#7f1d1d' : '#fee2e2',
-      border: '2px solid',
-      borderColor: isDark ? '#ef4444' : '#ef4444',
-      color: isDark ? '#ffffff' : '#000000'
-    },
-    alertText: {
-      color: isDark ? '#ffffff' : '#000000',
-      fontWeight: 'bold'
-    }
-  };
-
   if (success) {
     return (
-      <div style={styles.container}>
-        <Card style={styles.card}>
+      <div style={{ 
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#ffffff',
+        padding: '20px'
+      }}>
+        <Card style={{ 
+          width: '100%', 
+          maxWidth: '400px',
+          backgroundColor: '#ffffff',
+          border: '3px solid #000000',
+          boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)'
+        }}>
           <CardHeader style={{ paddingBottom: '20px' }}>
             <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
               <div style={{ 
@@ -149,17 +89,36 @@ export function ResetPassword() {
                 <CheckCircle2 style={{ height: '48px', width: '48px', color: '#ffffff' }} />
               </div>
             </div>
-            <CardTitle style={styles.title}>
+            <CardTitle style={{ 
+              fontSize: '32px', 
+              fontWeight: 'bold', 
+              textAlign: 'center',
+              color: '#000000',
+              marginBottom: '15px'
+            }}>
               Senha redefinida
             </CardTitle>
-            <CardDescription style={styles.description}>
+            <CardDescription style={{ 
+              textAlign: 'center',
+              color: '#000000',
+              fontSize: '16px',
+              fontWeight: '500'
+            }}>
               Sua senha foi redefinida com sucesso. Você já pode fazer login.
             </CardDescription>
           </CardHeader>
           <CardContent>
             <Button
               onClick={() => router.navigate("/")}
-              style={styles.button}
+              style={{
+                width: '100%',
+                height: '55px',
+                backgroundColor: '#000000',
+                color: '#ffffff',
+                fontSize: '18px',
+                fontWeight: 'bold',
+                border: '3px solid #000000'
+              }}
             >
               Fazer login
             </Button>
@@ -171,20 +130,52 @@ export function ResetPassword() {
 
   if (!token) {
     return (
-      <div style={styles.container}>
-        <Card style={styles.card}>
+      <div style={{ 
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#ffffff',
+        padding: '20px'
+      }}>
+        <Card style={{ 
+          width: '100%', 
+          maxWidth: '400px',
+          backgroundColor: '#ffffff',
+          border: '3px solid #000000',
+          boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)'
+        }}>
           <CardHeader style={{ paddingBottom: '20px' }}>
-            <CardTitle style={styles.title}>
+            <CardTitle style={{ 
+              fontSize: '32px', 
+              fontWeight: 'bold', 
+              textAlign: 'center',
+              color: '#000000',
+              marginBottom: '15px'
+            }}>
               Token inválido
             </CardTitle>
-            <CardDescription style={styles.description}>
+            <CardDescription style={{ 
+              textAlign: 'center',
+              color: '#000000',
+              fontSize: '16px',
+              fontWeight: '500'
+            }}>
               O link de redefinição de senha é inválido ou expirou.
             </CardDescription>
           </CardHeader>
           <CardContent>
             <Button
               onClick={() => router.navigate("/esqueci-senha")}
-              style={styles.button}
+              style={{
+                width: '100%',
+                height: '55px',
+                backgroundColor: '#000000',
+                color: '#ffffff',
+                fontSize: '18px',
+                fontWeight: 'bold',
+                border: '3px solid #000000'
+              }}
             >
               Solicitar nova redefinição
             </Button>
@@ -195,68 +186,127 @@ export function ResetPassword() {
   }
 
   return (
-    <div style={styles.container}>
-      <Card style={styles.card}>
+    <div style={{ 
+      minHeight: '100vh',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: '#ffffff',
+      padding: '20px'
+    }}>
+      <Card style={{ 
+        width: '100%', 
+        maxWidth: '400px',
+        backgroundColor: '#ffffff',
+        border: '3px solid #000000',
+        boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)'
+      }}>
         <CardHeader style={{ paddingBottom: '20px' }}>
-          <CardTitle style={styles.title}>
+          <CardTitle style={{ 
+            fontSize: '32px', 
+            fontWeight: 'bold', 
+            textAlign: 'center',
+            color: '#000000',
+            marginBottom: '15px'
+          }}>
             Redefinir senha
           </CardTitle>
-          <CardDescription style={styles.description}>
+          <CardDescription style={{ 
+            textAlign: 'center',
+            color: '#000000',
+            fontSize: '16px',
+            fontWeight: '500'
+          }}>
             Digite sua nova senha
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '25px' }}>
             {error && (
-              <Alert style={styles.alert}>
-                <AlertDescription style={styles.alertText}>
+              <Alert style={{ 
+                backgroundColor: '#ff0000', 
+                border: '3px solid #000000',
+                color: '#ffffff',
+                padding: '15px'
+              }}>
+                <AlertDescription style={{ color: '#ffffff', fontWeight: 'bold', fontSize: '16px' }}>
                   {error}
                 </AlertDescription>
               </Alert>
             )}
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              <Label htmlFor="password" style={styles.label}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <Label htmlFor="password" style={{ 
+                color: '#000000', 
+                fontWeight: 'bold',
+                fontSize: '18px'
+              }}>
                 Nova senha
               </Label>
               <Input
                 id="password"
                 type="password"
-                placeholder="••••••••"
+                placeholder="•••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 disabled={isLoading}
                 minLength={8}
-                style={styles.input}
+                style={{
+                  backgroundColor: '#ffffff',
+                  border: '3px solid #000000',
+                  color: '#000000',
+                  height: '50px',
+                  fontSize: '18px',
+                  fontWeight: 'bold'
+                }}
               />
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              <Label htmlFor="confirmPassword" style={styles.label}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <Label htmlFor="confirmPassword" style={{ 
+                color: '#000000', 
+                fontWeight: 'bold',
+                fontSize: '18px'
+              }}>
                 Confirmar senha
               </Label>
               <Input
                 id="confirmPassword"
                 type="password"
-                placeholder="••••••••"
+                placeholder="•••••••••"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
                 disabled={isLoading}
                 minLength={8}
-                style={styles.input}
+                style={{
+                  backgroundColor: '#ffffff',
+                  border: '3px solid #000000',
+                  color: '#000000',
+                  height: '50px',
+                  fontSize: '18px',
+                  fontWeight: 'bold'
+                }}
               />
             </div>
 
             <Button
               type="submit"
               disabled={isLoading}
-              style={styles.button}
+              style={{
+                width: '100%',
+                height: '55px',
+                backgroundColor: '#000000',
+                color: '#ffffff',
+                fontSize: '18px',
+                fontWeight: 'bold',
+                border: '3px solid #000000'
+              }}
             >
               {isLoading ? (
                 <>
-                  <Loader2 style={{ marginRight: '8px', height: '20px', width: '20px' }} className="animate-spin" />
+                  <Loader2 style={{ marginRight: '10px', height: '24px', width: '24px' }} className="animate-spin" />
                   Redefinindo...
                 </>
               ) : (
@@ -265,15 +315,20 @@ export function ResetPassword() {
             </Button>
           </form>
         </CardContent>
-        <CardFooter style={{ paddingTop: '20px' }}>
+        <CardFooter style={{ paddingTop: '25px' }}>
           <div style={{ 
             width: '100%', 
             textAlign: 'center',
-            fontSize: '14px'
+            fontSize: '16px'
           }}>
             <a
               href="/"
-              style={styles.link}
+              style={{ 
+                color: '#0000ff',
+                textDecoration: 'underline',
+                fontWeight: 'bold',
+                fontSize: '16px'
+              }}
             >
               Voltar para o login
             </a>
