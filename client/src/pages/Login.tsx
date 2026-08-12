@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Loader2 } from "lucide-react";
+import { Loader2, Sparkles } from "lucide-react";
 
 export function Login() {
   const router = useRouter();
@@ -42,24 +42,31 @@ export function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-4">
-      <Card className="w-full max-w-md shadow-lg border-2">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center">LiveSun Sunset</CardTitle>
-          <CardDescription className="text-center">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 via-purple-50 to-pink-100 dark:from-gray-800 dark:via-gray-900 dark:to-gray-800 p-4">
+      <Card className="w-full max-w-md shadow-2xl border-4 border-purple-200 dark:border-purple-700">
+        <CardHeader className="space-y-4 pb-6">
+          <div className="flex justify-center">
+            <div className="p-4 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full shadow-lg">
+              <Sparkles className="h-12 w-12 text-white" />
+            </div>
+          </div>
+          <CardTitle className="text-3xl font-bold text-center bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+            Aura LiveSun
+          </CardTitle>
+          <CardDescription className="text-center text-gray-700 dark:text-gray-300 text-base">
             Sistema de Gestão de Clínica de Bronzeamento
           </CardDescription>
         </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
+        <CardContent className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-5">
             {error && (
-              <Alert variant="destructive">
-                <AlertDescription>{error}</AlertDescription>
+              <Alert variant="destructive" className="border-2">
+                <AlertDescription className="font-medium">{error}</AlertDescription>
               </Alert>
             )}
 
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-gray-900 dark:text-gray-100">E-mail</Label>
+              <Label htmlFor="email" className="text-gray-900 dark:text-gray-100 font-semibold text-base">E-mail</Label>
               <Input
                 id="email"
                 type="email"
@@ -68,12 +75,12 @@ export function Login() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 disabled={isLoading}
-                className="bg-white dark:bg-gray-800"
+                className="bg-white dark:bg-gray-800 border-2 h-12 text-base"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-gray-900 dark:text-gray-100">Senha</Label>
+              <Label htmlFor="password" className="text-gray-900 dark:text-gray-100 font-semibold text-base">Senha</Label>
               <Input
                 id="password"
                 type="password"
@@ -82,18 +89,18 @@ export function Login() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 disabled={isLoading}
-                className="bg-white dark:bg-gray-800"
+                className="bg-white dark:bg-gray-800 border-2 h-12 text-base"
               />
             </div>
 
             <Button
               type="submit"
-              className="w-full"
+              className="w-full h-12 text-base font-semibold bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
               disabled={isLoading}
             >
               {isLoading ? (
                 <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  <Loader2 className="mr-2 h-5 w-5 animate-spin" />
                   Entrando...
                 </>
               ) : (
@@ -102,11 +109,11 @@ export function Login() {
             </Button>
           </form>
         </CardContent>
-        <CardFooter className="flex flex-col space-y-2">
+        <CardFooter className="flex flex-col space-y-2 pt-6">
           <div className="text-sm text-center text-gray-700 dark:text-gray-300">
             <a
               href="/esqueci-senha"
-              className="hover:underline text-blue-600 dark:text-blue-400"
+              className="hover:underline text-purple-600 dark:text-purple-400 font-medium"
             >
               Esqueci minha senha
             </a>

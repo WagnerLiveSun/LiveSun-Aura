@@ -2,7 +2,7 @@ import { COOKIE_NAME } from "@shared/const";
 import { TRPCError } from "@trpc/server";
 import { and, desc, eq, gte, inArray, lte, sql } from "drizzle-orm";
 import { z } from "zod";
-import { hash, verify } from "argon2";
+import bcrypt from "bcryptjs";
 import { randomUUID } from "crypto";
 import {
   auditoria,
@@ -173,7 +173,7 @@ export const appRouter = router({
         throw new TRPCError({ code: "UNAUTHORIZED", message: "E-mail ou senha incorretos" });
       }
 
-      const passwordValid = await verify(user.passwordHash, input.password);
+      const passwordValid = await bcrypt.compare(input.password, user.passwordHash);
       if (!passwordValid) {
         // Incrementar tentativas falhas
         const failedAttempts = (user.failedLoginAttempts || 0) + 1;
@@ -220,7 +220,7 @@ export const appRouter = router({
 
       // Gerar openId e hash da senha
       const openId = randomUUID();
-      const passwordHash = await hash(input.password);
+      const passwordHash = await bcrypt.hash(input.password, 10);
 
       // Criar usuário
       const [result] = await db.insert(users).values({
@@ -255,7 +255,7 @@ export const appRouter = router({
 
       // Gerar token e hash
       const token = randomUUID();
-      const tokenHash = await hash(token);
+      const tokenHash = await bcrypt.hash(token, 10);
       const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1 hora
 
       // Salvar token no banco
@@ -302,7 +302,7 @@ export const appRouter = router({
       }
 
       // Hash nova senha
-      const newPasswordHash = await hash(input.newPassword);
+      const newPasswordHash = await bcrypt.hash(input.newPassword, 10);
 
       // Atualizar senha e marcar token como usado
       await db.update(users).set({
