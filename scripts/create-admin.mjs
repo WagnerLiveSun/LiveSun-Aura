@@ -4,13 +4,12 @@ import { drizzle } from "drizzle-orm/mysql2";
 import mysql from "mysql2/promise";
 import { users } from "../drizzle/schema.js";
 import { eq } from "drizzle-orm";
+import readline from "readline";
 
 // Configuração do banco de dados
 const DATABASE_URL = process.env.DATABASE_URL || "mysql://root:livesun@localhost:3306/sunset";
 
 async function createAdmin() {
-  // Coletar dados do administrador via console
-  const readline = require('readline');
   const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout

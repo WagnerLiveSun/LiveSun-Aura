@@ -280,7 +280,7 @@ export const appRouter = router({
       // Buscar token válido e não usado
       const tokenRecord = (await db.select().from(passwordResetTokens)
         .where(and(
-          eq(passwordResetTokens.usedAt, null),
+          sql`${passwordResetTokens.usedAt} IS NULL`,
           gte(passwordResetTokens.expiresAt, new Date())
         ))
         .limit(1))[0];
@@ -290,7 +290,7 @@ export const appRouter = router({
       }
 
       // Verificar hash do token
-      const tokenValid = await verify(tokenRecord.tokenHash, input.token);
+      const tokenValid = await bcrypt.compare(input.token, tokenRecord.tokenHash);
       if (!tokenValid) {
         throw new TRPCError({ code: "BAD_REQUEST", message: "Token inválido ou expirado" });
       }
@@ -329,6 +329,62 @@ export const appRouter = router({
         await audit(ctx.user.id, "usuario", "PERFIL_ATUALIZADO", input.id, undefined, input);
         return { success: true };
       }),
+    registrarCliente: publicProcedure.input(z.object({
+      nome: z.string().min(3, "Nome deve ter no mínimo 3 caracteres"),
+      email: z.string().email("E-mail inválido"),
+      telefone: z.string().optional(),
+      password: z.string().min(8, "Senha deve ter no mínimo 8 caracteres"),
+      dataNascimento: z.string().optional(),
+    })).mutation(async ({ input }) => {
+      const db = requireDatabase(await getDb());
+
+      // Verificar se e-mail já existe
+      const existingUser = (await db.select().from(users).where(eq(users.email, input.email)).limit(1))[0];
+      if (existingUser) {
+        throw new TRPCError({ code: "CONFLICT", message: "E-mail já cadastrado" });
+      }
+
+      // Gerar openId e hash da senha
+      const openId = randomUUID();
+      const passwordHash = await bcrypt.hash(input.password, 10);
+
+      // Criar usuário com role "cliente"
+      const [userResult] = await db.insert(users).values({
+        openId,
+        name: input.nome,
+        email: input.email,
+        passwordHash,
+        role: "cliente",
+        telefone: input.telefone || null,
+        loginMethod: "local",
+        ativo: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        lastSignedIn: new Date(),
+      });
+
+      // Criar registro de cliente
+      const [clienteResult] = await db.insert(clientes).values({
+        userId: userResult.insertId,
+        nome: input.nome,
+        email: input.email,
+        telefone: input.telefone || null,
+        dataNascimento: input.dataNascimento || null,
+        status: "ATIVO",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
+
+      // Criar prontuário vazio
+      await db.insert(prontuarios).values({
+        clienteId: clienteResult.insertId,
+        atualizadoPor: userResult.insertId,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
+
+      return { success: true, userId: userResult.insertId, clienteId: clienteResult.insertId };
+    }),
   }),
 
   clientes: router({
@@ -481,24 +537,39 @@ export const appRouter = router({
         const roomList = await db.select().from(salas);
         return list.map((session) => ({ ...session, clienteNome: clientList.find((client) => client.id === session.clienteId)?.nome ?? "Cliente", servicoNome: serviceList.find((service) => service.id === session.servicoId)?.nome ?? "Serviço", profissionalNome: professionalList.find((professional) => professional.id === session.profissionalId)?.name ?? "Profissional", salaNome: roomList.find((room) => room.id === session.salaId)?.nome ?? null }));
       }),
-    create: staffProcedure.input(z.object({ clienteId: z.number().int().positive(), servicoId: z.number().int().positive(), profissionalId: z.number().int().positive(), salaId: z.number().int().positive().optional(), equipamentoId: z.number().int().positive().optional(), dataHoraInicio: z.coerce.date(), duracaoMin: z.number().int().min(10).max(600), observacoesInternas: z.string().max(3000).optional() }))
+    create: protectedProcedure.input(z.object({ clienteId: z.number().int().positive().optional(), servicoId: z.number().int().positive(), profissionalId: z.number().int().positive(), salaId: z.number().int().positive().optional(), equipamentoId: z.number().int().positive().optional(), dataHoraInicio: z.coerce.date(), dataHoraFim: z.coerce.date().optional(), duracaoMin: z.number().int().min(10).max(600).optional(), observacoesInternas: z.string().max(3000).optional() }))
       .mutation(async ({ input, ctx }) => {
-        if (ctx.user.role === "profissional" && input.profissionalId !== ctx.user.id) throw new TRPCError({ code: "FORBIDDEN", message: "Profissionais só podem agendar em sua própria agenda." });
+        // Se for cliente, só pode agendar para si mesmo
+        let clienteId = input.clienteId;
+        if (ctx.user.role === "cliente") {
+          if (input.clienteId && input.clienteId !== (await currentClientId(ctx.user.id))) {
+            throw new TRPCError({ code: "FORBIDDEN", message: "Clientes só podem agendar para si mesmos." });
+          }
+          clienteId = await currentClientId(ctx.user.id);
+          if (!clienteId) throw new TRPCError({ code: "NOT_FOUND", message: "Cliente não encontrado." });
+        }
+
+        // Profissionais só podem agendar em sua própria agenda
+        if (ctx.user.role === "profissional" && input.profissionalId !== ctx.user.id) {
+          throw new TRPCError({ code: "FORBIDDEN", message: "Profissionais só podem agendar em sua própria agenda." });
+        }
+
         const db = requireDatabase(await getDb());
-        const end = new Date(input.dataHoraInicio.getTime() + input.duracaoMin * 60_000);
+        const duracaoMin = input.duracaoMin || 60;
+        const dataHoraFim = input.dataHoraFim || new Date(input.dataHoraInicio.getTime() + duracaoMin * 60_000);
         const active = await db.select().from(sessoes).where(inArray(sessoes.status, ["PENDENTE", "AGUARDANDO_CONFIRMACAO", "CONFIRMADA", "EM_ATENDIMENTO"]));
-        const conflicts = hasScheduleConflict(active, { profissionalId: input.profissionalId, salaId: input.salaId, dataHoraInicio: input.dataHoraInicio, dataHoraFim: end });
+        const conflicts = hasScheduleConflict(active, { profissionalId: input.profissionalId, salaId: input.salaId, dataHoraInicio: input.dataHoraInicio, dataHoraFim });
         if (conflicts) throw new TRPCError({ code: "CONFLICT", message: "Há conflito de horário para o profissional ou sala selecionados." });
         const service = (await db.select().from(servicos).where(eq(servicos.id, input.servicoId)).limit(1))[0];
         if (!service) throw new TRPCError({ code: "NOT_FOUND", message: "Serviço não encontrado." });
-        const [created] = await db.insert(sessoes).values({ ...input, dataHoraFim: end, salaId: input.salaId ?? null, equipamentoId: input.equipamentoId ?? null, observacoesInternas: input.observacoesInternas || null, status: "AGUARDANDO_CONFIRMACAO" });
-        await db.insert(contasReceber).values({ clienteId: input.clienteId, sessaoId: created.insertId, descricao: `Serviço: ${service.nome}`, valorOriginal: service.valor, valorFinal: service.valor, dataVencimento: todayIso() });
+        const [created] = await db.insert(sessoes).values({ clienteId: clienteId!, servicoId: input.servicoId, profissionalId: input.profissionalId, salaId: input.salaId ?? null, equipamentoId: input.equipamentoId ?? null, dataHoraInicio: input.dataHoraInicio, dataHoraFim, duracaoMin, observacoesInternas: input.observacoesInternas || null, status: "AGUARDANDO_CONFIRMACAO" });
+        await db.insert(contasReceber).values({ clienteId: clienteId!, sessaoId: created.insertId, descricao: `Serviço: ${service.nome}`, valorOriginal: service.valor, valorFinal: service.valor, dataVencimento: todayIso() });
         const reminderAt = new Date(input.dataHoraInicio.getTime() - 24 * 60 * 60_000);
         if (reminderAt > new Date()) await db.insert(lembretes).values([
           { sessaoId: created.insertId, destinatario: "CLIENTE", agendadoPara: reminderAt, conteudo: `Lembrete de atendimento em ${input.dataHoraInicio.toLocaleString("pt-BR")}.` },
           { sessaoId: created.insertId, destinatario: "PROFISSIONAL", agendadoPara: reminderAt, conteudo: `Lembrete de atendimento agendado para ${input.dataHoraInicio.toLocaleString("pt-BR")}.` },
         ]);
-        await audit(ctx.user.id, "sessao", "CRIADA", created.insertId, input.clienteId, input);
+        await audit(ctx.user.id, "sessao", "CRIADA", created.insertId, clienteId, input);
         return { success: true, id: created.insertId };
       }),
     updateStatus: staffProcedure.input(z.object({ id: z.number().int().positive(), status: sessionStatus, motivoCancelamento: z.string().max(2000).optional() }))

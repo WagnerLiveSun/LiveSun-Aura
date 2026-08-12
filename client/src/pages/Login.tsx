@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2 } from "lucide-react";
+import { useEffect } from "react";
 
 export function Login() {
   const router = useRouter();
@@ -14,6 +15,18 @@ export function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  const { data: user } = trpc.auth.me.useQuery();
+
+  useEffect(() => {
+    if (user) {
+      if (user.role === "cliente") {
+        router.navigate("/cliente-dashboard");
+      } else {
+        router.navigate("/");
+      }
+    }
+  }, [user, router]);
 
   const loginMutation = trpc.auth.login.useMutation({
     onSuccess: () => {
@@ -172,7 +185,10 @@ export function Login() {
           <div style={{ 
             width: '100%', 
             textAlign: 'center',
-            fontSize: '16px'
+            fontSize: '16px',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '10px'
           }}>
             <a
               href="/esqueci-senha"
@@ -185,6 +201,20 @@ export function Login() {
             >
               Esqueci minha senha
             </a>
+            <p style={{ color: '#000000', fontSize: '16px' }}>
+              Não tem uma conta?{" "}
+              <a
+                href="/cadastrar"
+                style={{ 
+                  color: '#0000ff',
+                  textDecoration: 'underline',
+                  fontWeight: 'bold',
+                  fontSize: '16px'
+                }}
+              >
+                Cadastre-se
+              </a>
+            </p>
           </div>
         </CardFooter>
       </Card>
