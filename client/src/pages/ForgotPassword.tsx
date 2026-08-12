@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
@@ -14,6 +14,12 @@ export function ForgotPassword() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isDark, setIsDark] = useState(false);
+
+  useEffect(() => {
+    const darkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    setIsDark(darkMode);
+  }, []);
 
   const requestResetMutation = trpc.auth.solicitarRedefinicao.useMutation({
     onSuccess: () => {
@@ -40,23 +46,77 @@ export function ForgotPassword() {
     }
   };
 
+  const styles = {
+    container: {
+      minHeight: '100vh',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: isDark ? '#1a1a2e' : '#f5f5f5',
+      padding: '20px'
+    },
+    card: {
+      width: '100%',
+      maxWidth: '400px',
+      backgroundColor: isDark ? '#16213e' : '#ffffff',
+      border: `2px solid ${isDark ? '#ffffff' : '#000000'}`,
+      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+    },
+    title: {
+      fontSize: '28px',
+      fontWeight: 'bold',
+      textAlign: 'center',
+      color: isDark ? '#ffffff' : '#000000',
+      marginBottom: '10px'
+    },
+    description: {
+      textAlign: 'center',
+      color: isDark ? '#e0e0e0' : '#333333',
+      fontSize: '14px'
+    },
+    label: {
+      color: isDark ? '#ffffff' : '#000000',
+      fontWeight: 'bold',
+      fontSize: '14px'
+    },
+    input: {
+      backgroundColor: isDark ? '#0f3460' : '#ffffff',
+      border: `2px solid ${isDark ? '#ffffff' : '#000000'}`,
+      color: isDark ? '#ffffff' : '#000000',
+      height: '45px',
+      fontSize: '16px'
+    },
+    button: {
+      width: '100%',
+      height: '50px',
+      backgroundColor: isDark ? '#e94560' : '#000000',
+      color: '#ffffff',
+      fontSize: '16px',
+      fontWeight: 'bold',
+      border: '2px solid',
+      borderColor: isDark ? '#e94560' : '#000000'
+    },
+    link: {
+      color: isDark ? '#e94560' : '#0000ff',
+      textDecoration: 'underline',
+      fontWeight: 'bold'
+    },
+    alert: {
+      backgroundColor: isDark ? '#7f1d1d' : '#fee2e2',
+      border: '2px solid',
+      borderColor: isDark ? '#ef4444' : '#ef4444',
+      color: isDark ? '#ffffff' : '#000000'
+    },
+    alertText: {
+      color: isDark ? '#ffffff' : '#000000',
+      fontWeight: 'bold'
+    }
+  };
+
   if (success) {
     return (
-      <div style={{ 
-        minHeight: '100vh', 
-        display: 'flex', 
-        alignItems: 'center', 
-        justifyContent: 'center',
-        backgroundColor: '#f5f5f5',
-        padding: '20px'
-      }}>
-        <Card style={{ 
-          width: '100%', 
-          maxWidth: '400px',
-          backgroundColor: '#ffffff',
-          border: '2px solid #000000',
-          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
-        }}>
+      <div style={styles.container}>
+        <Card style={styles.card}>
           <CardHeader style={{ paddingBottom: '20px' }}>
             <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
               <div style={{ 
@@ -70,35 +130,17 @@ export function ForgotPassword() {
                 <CheckCircle2 style={{ height: '48px', width: '48px', color: '#ffffff' }} />
               </div>
             </div>
-            <CardTitle style={{ 
-              fontSize: '28px', 
-              fontWeight: 'bold', 
-              textAlign: 'center',
-              color: '#000000',
-              marginBottom: '10px'
-            }}>
+            <CardTitle style={styles.title}>
               E-mail enviado
             </CardTitle>
-            <CardDescription style={{ 
-              textAlign: 'center',
-              color: '#333333',
-              fontSize: '14px'
-            }}>
+            <CardDescription style={styles.description}>
               Enviamos instruções para redefinir sua senha para o e-mail informado.
             </CardDescription>
           </CardHeader>
           <CardContent>
             <Button
               onClick={() => router.navigate("/")}
-              style={{
-                width: '100%',
-                height: '50px',
-                backgroundColor: '#000000',
-                color: '#ffffff',
-                fontSize: '16px',
-                fontWeight: 'bold',
-                border: '2px solid #000000'
-              }}
+              style={styles.button}
             >
               Voltar para o login
             </Button>
@@ -109,59 +151,28 @@ export function ForgotPassword() {
   }
 
   return (
-    <div style={{ 
-      minHeight: '100vh', 
-      display: 'flex', 
-      alignItems: 'center', 
-      justifyContent: 'center',
-      backgroundColor: '#f5f5f5',
-      padding: '20px'
-    }}>
-      <Card style={{ 
-        width: '100%', 
-        maxWidth: '400px',
-        backgroundColor: '#ffffff',
-        border: '2px solid #000000',
-        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
-      }}>
+    <div style={styles.container}>
+      <Card style={styles.card}>
         <CardHeader style={{ paddingBottom: '20px' }}>
-          <CardTitle style={{ 
-            fontSize: '28px', 
-            fontWeight: 'bold', 
-            textAlign: 'center',
-            color: '#000000',
-            marginBottom: '10px'
-          }}>
+          <CardTitle style={styles.title}>
             Esqueci minha senha
           </CardTitle>
-          <CardDescription style={{ 
-            textAlign: 'center',
-            color: '#333333',
-            fontSize: '14px'
-          }}>
+          <CardDescription style={styles.description}>
             Digite seu e-mail para receber instruções de redefinição
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
             {error && (
-              <Alert style={{ 
-                backgroundColor: '#fee2e2', 
-                border: '2px solid #ef4444',
-                color: '#000000'
-              }}>
-                <AlertDescription style={{ color: '#000000', fontWeight: 'bold' }}>
+              <Alert style={styles.alert}>
+                <AlertDescription style={styles.alertText}>
                   {error}
                 </AlertDescription>
               </Alert>
             )}
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              <Label htmlFor="email" style={{ 
-                color: '#000000', 
-                fontWeight: 'bold',
-                fontSize: '14px'
-              }}>
+              <Label htmlFor="email" style={styles.label}>
                 E-mail
               </Label>
               <Input
@@ -172,28 +183,14 @@ export function ForgotPassword() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 disabled={isLoading}
-                style={{
-                  backgroundColor: '#ffffff',
-                  border: '2px solid #000000',
-                  color: '#000000',
-                  height: '45px',
-                  fontSize: '16px'
-                }}
+                style={styles.input}
               />
             </div>
 
             <Button
               type="submit"
               disabled={isLoading}
-              style={{
-                width: '100%',
-                height: '50px',
-                backgroundColor: '#000000',
-                color: '#ffffff',
-                fontSize: '16px',
-                fontWeight: 'bold',
-                border: '2px solid #000000'
-              }}
+              style={styles.button}
             >
               {isLoading ? (
                 <>
@@ -214,11 +211,7 @@ export function ForgotPassword() {
           }}>
             <a
               href="/"
-              style={{ 
-                color: '#0000ff',
-                textDecoration: 'underline',
-                fontWeight: 'bold'
-              }}
+              style={styles.link}
             >
               Voltar para o login
             </a>
