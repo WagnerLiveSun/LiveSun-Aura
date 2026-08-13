@@ -45,9 +45,15 @@ export function useAuth(options?: UseAuthOptions) {
 
   const state = useMemo(() => {
     // PRIORIDADE 1: Ler do localStorage (persiste across reloads)
-    const storedUser = JSON.parse(
-      localStorage.getItem("app-runtime-user-info") ?? "null"
-    );
+    let storedUser: typeof meQuery.data = null;
+    try {
+      storedUser = JSON.parse(
+        localStorage.getItem("app-runtime-user-info") ?? "null"
+      ) as typeof meQuery.data;
+    } catch {
+      // JSON corrompido no localStorage - ignorar e usar a query
+      storedUser = null;
+    }
 
     // PRIORIDADE 2: Usar dados da query TrPC como fonte de verdade
     // Mas apenas se nao houver dados stored (evita overwrite em cada focus)
