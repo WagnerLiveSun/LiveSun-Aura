@@ -40,27 +40,39 @@ export function useAuth(options?: UseAuthOptions) {
         sessionStorage.removeItem("session-storage");
       } catch {}
       utils.auth.me.setData(undefined, null);
-      await utils.auth.me.invalidate();
     }
   }, [logoutMutation, utils]);
 
   const state = useMemo(() => {
-    localStorage.setItem(
-      "app-runtime-user-info",
-      JSON.stringify(meQuery.data)
+    // PRIORIDADE 1: Ler do localStorage (persiste across reloads)
+    const storedUser = JSON.parse(
+      localStorage.getItem("app-runtime-user-info") ?? "null"
     );
+
+    // PRIORIDADE 2: Usar dados da query TrPC como fonte de verdade
+    // Mas apenas se nao houver dados stored (evita overwrite em cada focus)
+    const user = storedUser !== null ? storedUser : meQuery.data ?? null;
+
+    // Sincronizar localStorage com dados atuais da query APENAS quando user vem da query
+    // Isso evita loop de setItem a cada focus
+    if (storedUser === null && meQuery.data !== null) {
+      localStorage.setItem(
+        "app-runtime-user-info",
+        JSON.stringify(meQuery.data)
+      );
+    }
+
     return {
-      user: meQuery.data ?? null,
+      user,
       loading: meQuery.isLoading || logoutMutation.isPending,
       error: meQuery.error ?? logoutMutation.error ?? null,
-      isAuthenticated: Boolean(meQuery.data),
+      isAuthenticated: Boolean(user ?? meQuery.data),
     };
   }, [
     meQuery.data,
     meQuery.error,
     meQuery.isLoading,
-    logoutMutation.error,
-    logoutMutation.isPending,
+    localStorage.getItem("app-runtime-user-info"),
   ]);
 
   useEffect(() => {

@@ -30,7 +30,6 @@ export function Login() {
 
   const loginMutation = trpc.auth.login.useMutation({
     onSuccess: () => {
-      utils.auth.me.invalidate();
       navigate("/");
     },
     onError: (err) => {
