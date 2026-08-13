@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
-import { useRouter, useLocation } from "wouter";
+import { useLocation } from "wouter";
 import { trpc } from "@/lib/trpc";
 
 export default function ClientDashboard() {
-  const router = useRouter();
-  const [location] = useLocation();
+  const [, navigate] = useLocation();
   const [message, setMessage] = useState("");
 
   const { data: user } = trpc.auth.me.useQuery();
@@ -20,10 +19,10 @@ export default function ClientDashboard() {
     try {
       const logoutMutation = trpc.auth.logout.useMutation();
       await logoutMutation.mutateAsync();
-      router.navigate("/entrar");
+      navigate("/entrar");
     } catch (error) {
       console.error("Erro ao fazer logout:", error);
-      router.navigate("/entrar");
+      navigate("/entrar");
     }
   };
 
@@ -48,7 +47,7 @@ export default function ClientDashboard() {
           Esta área é exclusiva para clientes.
         </p>
         <button
-          onClick={() => router.navigate("/entrar")}
+          onClick={() => navigate("/entrar")}
           style={{
             padding: "15px 30px",
             fontSize: "18px",
@@ -146,7 +145,7 @@ export default function ClientDashboard() {
               Agende sua próxima sessão de bronzeamento.
             </p>
             <button
-              onClick={() => router.navigate("/cliente-agendamento")}
+              onClick={() => navigate("/cliente-agendamento")}
               style={{
                 padding: "12px 24px",
                 fontSize: "16px",
@@ -176,7 +175,7 @@ export default function ClientDashboard() {
               Preencha ou atualize suas informações de saúde.
             </p>
             <button
-              onClick={() => router.navigate("/cliente-anamnese")}
+              onClick={() => navigate("/cliente-anamnese")}
               style={{
                 padding: "12px 24px",
                 fontSize: "16px",
@@ -206,7 +205,7 @@ export default function ClientDashboard() {
               {minhasSessoes.length} agendamento(s) encontrado(s)
             </p>
             <button
-              onClick={() => router.navigate("/cliente-historico")}
+              onClick={() => navigate("/cliente-historico")}
               style={{
                 padding: "12px 24px",
                 fontSize: "16px",

@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useRouter } from "wouter";
+import { useEffect, useState } from "react";
+import { useLocation } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,31 +7,31 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2 } from "lucide-react";
-import { useEffect } from "react";
 
 export function Login() {
-  const router = useRouter();
+  const [_, navigate] = useLocation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const { data: user } = trpc.auth.me.useQuery();
+  const utils = trpc.useUtils();
 
   useEffect(() => {
     if (user) {
       if (user.role === "cliente") {
-        router.navigate("/cliente-dashboard");
+        navigate("/cliente-dashboard");
       } else {
-        router.navigate("/");
+        navigate("/");
       }
     }
-  }, [user, router]);
+  }, [user, navigate]);
 
   const loginMutation = trpc.auth.login.useMutation({
     onSuccess: () => {
-      trpc.auth.me.invalidate();
-      router.navigate("/");
+      utils.auth.me.invalidate();
+      navigate("/");
     },
     onError: (err) => {
       setError(err.message || "Erro ao fazer login");

@@ -1,8 +1,8 @@
 import { trpc } from "@/lib/trpc";
-import { useRouter } from "wouter";
+import { useLocation } from "wouter";
 
 export default function ClientHistory() {
-  const router = useRouter();
+  const [, navigate] = useLocation();
 
   const { data: user } = trpc.auth.me.useQuery();
   const { data: clientes } = trpc.clientes.list.useQuery();
@@ -29,7 +29,7 @@ export default function ClientHistory() {
           Esta área é exclusiva para clientes.
         </p>
         <button
-          onClick={() => router.navigate("/entrar")}
+          onClick={() => navigate("/entrar")}
           style={{
             padding: "15px 30px",
             fontSize: "18px",
@@ -71,7 +71,7 @@ export default function ClientHistory() {
           </p>
         </div>
         <button
-          onClick={() => router.navigate("/cliente-dashboard")}
+          onClick={() => navigate("/cliente-dashboard")}
           style={{
             padding: "10px 20px",
             fontSize: "16px",

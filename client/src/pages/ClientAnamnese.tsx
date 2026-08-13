@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { useRouter } from "wouter";
+import { useLocation } from "wouter";
 import { trpc } from "@/lib/trpc";
 
 export default function ClientAnamnese() {
-  const router = useRouter();
+  const [, navigate] = useLocation();
   const [formData, setFormData] = useState({
     alergias: "",
     restricoes: "",
@@ -74,7 +74,7 @@ export default function ClientAnamnese() {
         observacoesClinicas: observacoesCompletas,
       });
 
-      router.navigate("/cliente-agendamento");
+            navigate("/cliente-agendamento");
     } catch (err: any) {
       setError(err.message || "Erro ao salvar anamnese");
     } finally {
@@ -476,7 +476,7 @@ export default function ClientAnamnese() {
           fontSize: "16px",
         }}>
           <button
-            onClick={() => router.navigate("/cliente-dashboard")}
+            onClick={() => navigate("/cliente-dashboard")}
             style={{
               color: "#0000ff",
               textDecoration: "underline",

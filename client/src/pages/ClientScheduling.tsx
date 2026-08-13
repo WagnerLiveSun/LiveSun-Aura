@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { useRouter } from "wouter";
+import { useLocation } from "wouter";
 import { trpc } from "@/lib/trpc";
 
 export default function ClientScheduling() {
-  const router = useRouter();
+  const [, navigate] = useLocation();
   const [formData, setFormData] = useState({
     servicoId: 0,
     profissionalId: 0,
@@ -75,7 +75,7 @@ export default function ClientScheduling() {
         observacoesInternas: formData.observacoes || undefined,
       });
 
-      router.navigate("/cliente-dashboard");
+            navigate("/cliente-dashboard");
     } catch (err: any) {
       setError(err.message || "Erro ao realizar agendamento");
     } finally {
@@ -305,7 +305,7 @@ export default function ClientScheduling() {
           fontSize: "16px",
         }}>
           <button
-            onClick={() => router.navigate("/cliente-dashboard")}
+            onClick={() => navigate("/cliente-dashboard")}
             style={{
               color: "#0000ff",
               textDecoration: "underline",

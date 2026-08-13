@@ -1,11 +1,9 @@
 import { useState } from "react";
-import { useRouter } from "wouter";
+import { useLocation } from "wouter";
 import { trpc } from "@/lib/trpc";
 
 export default function RegisterClient() {
-  // useRouter retorna [location, navigate]
-  const [, navigate] = useRouter();
-
+  const [, navigate] = useLocation();
   const [formData, setFormData] = useState({
     nome: "",
     email: "",
@@ -14,7 +12,6 @@ export default function RegisterClient() {
     confirmPassword: "",
     dataNascimento: "",
   });
-
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -45,7 +42,7 @@ export default function RegisterClient() {
         dataNascimento: formData.dataNascimento || undefined,
       });
 
-      navigate("/entrar");
+            navigate("/entrar");
     } catch (err: any) {
       setError(err.message || "Erro ao realizar cadastro");
     } finally {
@@ -58,90 +55,73 @@ export default function RegisterClient() {
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        minHeight: "100vh",
+    <div style={{
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center",
+      minHeight: "100vh",
+      backgroundColor: "#ffffff",
+      padding: "20px",
+    }}>
+      <div style={{
+        width: "100%",
+        maxWidth: "500px",
         backgroundColor: "#ffffff",
-        padding: "20px",
-      }}
-    >
-      <div
-        style={{
-          width: "100%",
-          maxWidth: "500px",
-          backgroundColor: "#ffffff",
-          padding: "40px",
-          borderRadius: "8px",
-          boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
-        }}
-      >
-        <h1
-          style={{
-            fontSize: "32px",
-            fontWeight: "bold",
-            marginBottom: "10px",
-            textAlign: "center",
-            color: "#000000",
-          }}
-        >
+        padding: "40px",
+        borderRadius: "8px",
+        boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
+      }}>
+        <h1 style={{
+          fontSize: "32px",
+          fontWeight: "bold",
+          marginBottom: "10px",
+          textAlign: "center",
+          color: "#000000",
+        }}>
           Aura LiveSun
         </h1>
-        <p
-          style={{
-            fontSize: "18px",
-            marginBottom: "30px",
-            textAlign: "center",
-            color: "#000000",
-          }}
-        >
+        <p style={{
+          fontSize: "18px",
+          marginBottom: "30px",
+          textAlign: "center",
+          color: "#000000",
+        }}>
           Sistema de Gestão de Clínica de Bronzeamento
         </p>
-        <h2
-          style={{
-            fontSize: "24px",
-            fontWeight: "bold",
-            marginBottom: "20px",
-            textAlign: "center",
-            color: "#000000",
-          }}
-        >
+        <h2 style={{
+          fontSize: "24px",
+          fontWeight: "bold",
+          marginBottom: "20px",
+          textAlign: "center",
+          color: "#000000",
+        }}>
           Cadastro de Cliente
         </h2>
 
         {error && (
-          <div
-            style={{
-              backgroundColor: "#fee",
-              color: "#c00",
-              padding: "12px",
-              borderRadius: "4px",
-              marginBottom: "20px",
-              fontSize: "16px",
-              border: "1px solid #fcc",
-            }}
-          >
+          <div style={{
+            backgroundColor: "#fee",
+            color: "#c00",
+            padding: "12px",
+            borderRadius: "4px",
+            marginBottom: "20px",
+            fontSize: "16px",
+            border: "1px solid #fcc",
+          }}>
             {error}
           </div>
         )}
 
-        <form
-          onSubmit={handleSubmit}
-          style={{ display: "flex", flexDirection: "column", gap: "15px" }}
-        >
+        <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
           <div>
-            <label
-              style={{
-                display: "block",
-                fontSize: "18px",
-                fontWeight: "bold",
-                marginBottom: "5px",
-                color: "#000000",
-              }}
-            >
+            <label style={{
+              display: "block",
+              fontSize: "18px",
+              fontWeight: "bold",
+              marginBottom: "5px",
+              color: "#000000",
+            }}>
               Nome Completo
             </label>
             <input
@@ -166,15 +146,13 @@ export default function RegisterClient() {
           </div>
 
           <div>
-            <label
-              style={{
-                display: "block",
-                fontSize: "18px",
-                fontWeight: "bold",
-                marginBottom: "5px",
-                color: "#000000",
-              }}
-            >
+            <label style={{
+              display: "block",
+              fontSize: "18px",
+              fontWeight: "bold",
+              marginBottom: "5px",
+              color: "#000000",
+            }}>
               E-mail
             </label>
             <input
@@ -198,15 +176,13 @@ export default function RegisterClient() {
           </div>
 
           <div>
-            <label
-              style={{
-                display: "block",
-                fontSize: "18px",
-                fontWeight: "bold",
-                marginBottom: "5px",
-                color: "#000000",
-              }}
-            >
+            <label style={{
+              display: "block",
+              fontSize: "18px",
+              fontWeight: "bold",
+              marginBottom: "5px",
+              color: "#000000",
+            }}>
               Telefone
             </label>
             <input
@@ -229,15 +205,13 @@ export default function RegisterClient() {
           </div>
 
           <div>
-            <label
-              style={{
-                display: "block",
-                fontSize: "18px",
-                fontWeight: "bold",
-                marginBottom: "5px",
-                color: "#000000",
-              }}
-            >
+            <label style={{
+              display: "block",
+              fontSize: "18px",
+              fontWeight: "bold",
+              marginBottom: "5px",
+              color: "#000000",
+            }}>
               Data de Nascimento
             </label>
             <input
@@ -259,15 +233,13 @@ export default function RegisterClient() {
           </div>
 
           <div>
-            <label
-              style={{
-                display: "block",
-                fontSize: "18px",
-                fontWeight: "bold",
-                marginBottom: "5px",
-                color: "#000000",
-              }}
-            >
+            <label style={{
+              display: "block",
+              fontSize: "18px",
+              fontWeight: "bold",
+              marginBottom: "5px",
+              color: "#000000",
+            }}>
               Senha
             </label>
             <input
@@ -292,15 +264,13 @@ export default function RegisterClient() {
           </div>
 
           <div>
-            <label
-              style={{
-                display: "block",
-                fontSize: "18px",
-                fontWeight: "bold",
-                marginBottom: "5px",
-                color: "#000000",
-              }}
-            >
+            <label style={{
+              display: "block",
+              fontSize: "18px",
+              fontWeight: "bold",
+              marginBottom: "5px",
+              color: "#000000",
+            }}>
               Confirmar Senha
             </label>
             <input
@@ -343,13 +313,11 @@ export default function RegisterClient() {
           </button>
         </form>
 
-        <div
-          style={{
-            marginTop: "20px",
-            textAlign: "center",
-            fontSize: "16px",
-          }}
-        >
+        <div style={{
+          marginTop: "20px",
+          textAlign: "center",
+          fontSize: "16px",
+        }}>
           <p style={{ color: "#000000", marginBottom: "10px" }}>
             Já tem uma conta?{" "}
             <button

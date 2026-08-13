@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useRouter } from "wouter";
+import { useLocation } from "wouter";
 import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,7 +9,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2, CheckCircle2 } from "lucide-react";
 
 export function ForgotPassword() {
-  const router = useRouter();
+  const [, navigate] = useLocation();
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
@@ -90,7 +90,7 @@ export function ForgotPassword() {
           </CardHeader>
           <CardContent>
             <Button
-              onClick={() => router.navigate("/")}
+              onClick={() => navigate("/")}
               style={{
                 width: '100%',
                 height: '55px',
